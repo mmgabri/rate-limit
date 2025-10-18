@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: formatador
+
+server:
+  port: 8081
+
+grpc:
+  server:
+    port: 9091
+    host: localhost
+  autorizador-client:
+    port: 9092
+    host: localhost
+    timeout: 7000

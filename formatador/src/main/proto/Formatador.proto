@@ -1,0 +1,44 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package br.com.mmgabri.grpc.autorizador;
+
+service FormatadorService {
+    rpc ProcessaTransacao (FormatadorRequest) returns (FormatadorResponse);
+}
+
+message FormatadorRequest {
+    string de02 = 1;
+    string de03 = 2;
+    string de04 = 3;
+    string de07 = 4;
+    string de12 = 5;
+    string de18 = 6;
+    string de22 = 7;
+    string de43 = 8;
+    string de49 = 9;
+    string de52 = 10;
+    string de55 = 11;
+    string de63 = 12;
+    bool isReversal = 13;
+    string transactionId = 14;
+    string customReturnSeguranca = 15;
+    string customReturnLimitePortador = 16;
+    string customReturnLimite = 17;
+    string customReturnLancamentoConta = 18;
+    string customReturnFraude = 19;
+}
+
+message FormatadorResponse {
+        string de02 = 2;
+        string de03 = 3;
+        string de04 = 4;
+        string de07 = 5;
+        string de12 = 6;
+        string de18 = 7;
+        string de22 = 8;
+        string de39 = 9;
+        string de43 = 10;
+        string de49 = 11;
+        string de55 = 12;
+        string de63 = 13;
+}

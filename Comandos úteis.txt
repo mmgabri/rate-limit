@@ -1,0 +1,80 @@
+Kafka UI: http://localhost:8080
+
+Prometheus: http://localhost:9090
+
+Grafana: http://localhost:3000
+ (user: admin, pass: admin)
+ 
+ ---
+ 
+ 
+
+# consumir
+docker-compose exec kcat kcat -b kafka:19092 -t teste1 -C -o beginning
+
+# produzir
+docker-compose exec -T kafka /opt/kafka/bin/kafka-console-producer.sh --broker-list kafka:19092 --topic teste1
+
+
+#Produzir mensagems em loop
+$psi = New-Object System.Diagnostics.ProcessStartInfo
+$psi.FileName = "docker"
+$psi.Arguments = "exec -i kcat sh -lc `"kcat -P -b kafka:19092 -t teste1`""
+$psi.RedirectStandardInput = $true
+$psi.UseShellExecute = $false
+$proc = [System.Diagnostics.Process]::Start($psi)
+
+$burstSize = 1000     # quantas mensagens por pico
+$interval  = 5        # pausa (segundos) entre picos
+$i = 0
+
+try {
+  while ($true) {
+    # ------ INÍCIO DO PICO ------
+    for ($j = 1; $j -le $burstSize; $j++) {
+      $i++
+      $line = "$(Get-Date -Format o) pico=1 msg=$('{0:d7}' -f $i) host=$env:COMPUTERNAME"
+      $proc.StandardInput.WriteLine($line)
+    }
+    # ------ FIM DO PICO ------
+    Start-Sleep -Seconds $interval
+  }
+}
+finally {
+  if ($proc -and -not $proc.HasExited) { $proc.Kill() }
+}
+
+
+
+#Produzir mensagems em loop
+$psi = New-Object System.Diagnostics.ProcessStartInfo
+$psi.FileName = "docker"
+$psi.Arguments = "exec -i kcat sh -lc `"kcat -P -b kafka:19092 -t teste1`""
+$psi.RedirectStandardInput = $true
+$psi.UseShellExecute = $false
+$proc = [System.Diagnostics.Process]::Start($psi)
+
+$burstSize = 10     # quantas mensagens por pico
+$interval  = 1        # pausa (segundos) entre picos
+$i = 0
+
+try {
+  while ($true) {
+    # ------ INÍCIO DO PICO ------
+    for ($j = 1; $j -le $burstSize; $j++) {
+      $i++
+      $line = "$(Get-Date -Format o) pico=1 msg=$('{0:d7}' -f $i) host=$env:COMPUTERNAME"
+      $proc.StandardInput.WriteLine($line)
+    }
+    # ------ FIM DO PICO ------
+    Start-Sleep -Seconds $interval
+  }
+}
+finally {
+  if ($proc -and -not $proc.HasExited) { $proc.Kill() }
+}
+
+
+docker compose stop prometheus
+docker compose rm -sf prometheus
+docker compose up -d prometheus

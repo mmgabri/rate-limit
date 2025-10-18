@@ -1,0 +1,14 @@
+server:
+  port: 8081
+  connection-timeout: 7000
+  tomcat:
+    keep-alive-timeout: 300000
+
+grpc:
+  server:
+    port: 9091
+    host: localhost
+  autorizador-client:
+    port: 9092
+    host: autorizador-service.autorizador-debito.local
+    timeout: 7000

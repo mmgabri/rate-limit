@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/ExemploUso.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/ExemploUso.java" />
+              <option name="updatedContent" value="import java.util.Scanner;&#10;&#10;public class ExemploUso {&#10;    public static void main(String[] args) {&#10;        Scanner scanner = new Scanner(System.in);&#10;        &#10;        System.out.print(&quot;Digite um número para calcular o fatorial: &quot;);&#10;        int numero = scanner.nextInt();&#10;        &#10;        try {&#10;            long resultado = CalculadoraFatorial.calcularFatorial(numero);&#10;            System.out.printf(&quot;O fatorial de %d é %d%n&quot;, numero, resultado);&#10;        } catch (IllegalArgumentException e) {&#10;            System.out.println(&quot;Erro: &quot; + e.getMessage());&#10;        }&#10;        &#10;        scanner.close();&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/testes/CalculadoraFatorial.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/testes/CalculadoraFatorial.java" />
+              <option name="updatedContent" value="package testes;&#10;&#10;import java.util.Scanner;&#10;import java.util.InputMismatchException;&#10;import java.math.BigInteger;&#10;&#10;public class CalculadoraFatorial {&#10;&#10;    // Calcula fatorial usando BigInteger para evitar overflow&#10;    private static BigInteger calcularFatorial(int numero) {&#10;        if (numero &lt; 0) {&#10;            throw new IllegalArgumentException(&quot;O número não pode ser negativo&quot;);&#10;        }&#10;        BigInteger resultado = BigInteger.ONE;&#10;        for (int i = 2; i &lt;= numero; i++) {&#10;            resultado = resultado.multiply(BigInteger.valueOf(i));&#10;        }&#10;        return resultado;&#10;    }&#10;&#10;    public static void main(String[] args) {&#10;        Scanner scanner = new Scanner(System.in);&#10;        System.out.print(&quot;Digite um número para calcular o fatorial: &quot;);&#10;        try {&#10;            int numero = scanner.nextInt();&#10;            BigInteger resultado = calcularFatorial(numero);&#10;            System.out.printf(&quot;O fatorial de %d é %s%n&quot;, numero, resultado.toString());&#10;        } catch (InputMismatchException e) {&#10;            System.out.println(&quot;Entrada inválida: digite um número inteiro.&quot;);&#10;        } catch (IllegalArgumentException e) {&#10;            System.out.println(&quot;Erro: &quot; + e.getMessage());&#10;        } finally {&#10;            scanner.close();&#10;        }&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
