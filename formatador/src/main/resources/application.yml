@@ -49,3 +49,9 @@ kafka:
     concurrency: 3  # Número de threads consumidoras
     rate:
       messages-per-second: 1  # Taxa máxima de mensagens por segundo
+
+app:
+  rate-limit:
+    tps: 5000
+  sleep:
+    transaction: 0 # usado 5 ms nos testes
