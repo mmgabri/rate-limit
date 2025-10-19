@@ -23,6 +23,25 @@ spring:
 server:
   port: 8081
 
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.90,0.95,0.99
+  datadog:
+    metrics:
+      export:
+        apiKey: 432ae4eb0e2702b3c572587400077c09
+        step: 5s
+        uri: https://us5.datadoghq.com/
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+
 kafka:
   topic:
     request-transactions: topic-request-transactions
