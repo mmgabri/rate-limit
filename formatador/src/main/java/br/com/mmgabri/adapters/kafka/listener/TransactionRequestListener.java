@@ -1,5 +1,6 @@
 package br.com.mmgabri.adapters.kafka.listener;
 
+import br.com.mmgabri.services.ProcessTransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -13,6 +14,11 @@ import org.springframework.stereotype.Component;
 public class TransactionRequestListener {
     private static final Logger logger = LoggerFactory.getLogger(TransactionRequestListener.class);
 
+    private final ProcessTransactionService process;
+
+    private TransactionRequestListener(final ProcessTransactionService process) {
+        this.process = process;
+    }
 
     @KafkaListener(
             topics = "${kafka.topic.request-transactions}",
@@ -26,6 +32,7 @@ public class TransactionRequestListener {
     protected void receivedMessage(final ConsumerRecord<String, String> message, final Acknowledgment ack) {
         try {
             logger.info("Mensagem recebida do tópico: {}", message.value());
+            process.process(message.value());
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem: {}", e.getMessage(), e);
         } finally {
