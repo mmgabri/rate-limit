@@ -1,15 +1,32 @@
 spring:
   application:
     name: formatador
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: latest
+      client-id: transaction-consumer-client
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: transaction-consumer-group
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        max:
+          poll:
+            records: 10
+            interval:
+              ms: 120000
+        #heartbeat.interval.ms: 3000
+        #session.timeout.ms: 45000
+        #max.partition.fetch.bytes: 1048576  # 1MB
+        #fetch.max.wait.ms: 500
 server:
   port: 8081
 
-grpc:
-  server:
-    port: 9091
-    host: localhost
-  autorizador-client:
-    port: 9092
-    host: localhost
-    timeout: 7000
+kafka:
+  topic:
+    request-transactions: topic-request-transactions
+  consumer:
+    concurrency: 3  # Número de threads consumidoras
+    rate:
+      messages-per-second: 1  # Taxa máxima de mensagens por segundo
