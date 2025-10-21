@@ -54,4 +54,13 @@ app:
   rate-limit:
     tps: 5000
   sleep:
-    transaction: 0 # usado 5 ms nos testes
+    transaction: 4 # usado 5 ms nos testes
+
+resilience4j:
+  ratelimiter:
+    instances:
+      topic-request-transactions:
+        limitForPeriod: 1000           # máx. permissões por período
+        limitRefreshPeriod: 1s        # período de reposição
+        timeoutDuration: 2s            # 0 = não espera, falha na hora
+        #eventConsumerBufferSize: 100
