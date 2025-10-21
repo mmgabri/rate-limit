@@ -60,6 +60,6 @@ module "ecs_app" {
   cpu                = 2048
   memory             = 4096
   region             = var.region
-  container_port     = 8080
-  host_port          = 8080
+  container_port     = 8081
+  host_port          = 8081
 }
