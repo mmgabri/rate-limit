@@ -52,6 +52,7 @@ kafka:
 
 app:
   rate-limit:
-    tps: 5000
+    toggle: true
+    tps: 700
   sleep:
-    transaction: 0 # usado 5 ms nos testes
+    transaction: 4 # usado 5 ms nos testes

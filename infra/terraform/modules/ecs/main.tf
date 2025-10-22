@@ -34,9 +34,10 @@ resource "aws_ecs_task_definition" "service_task" {
         { name = "DD_JMXFETCH_STATSD_PORT", value = "8125" },
         { name = "DD_API_KEY", value = var.datadog_api_key },
         { name = "MAX_POLL_RECORDS", value = "10" },
-        { name = "RATE_LIMIT_TPS", value = "5" },
-        { name = "SLEEP_TRANSACTION", value = "5" },
-        { name = "BOOTSTRAP_SERVERS", value = "172.31.30.51:9092" }
+        { name = "RATE_LIMIT_TPS", value = "700" },
+        { name = "RATE_LIMIT_TOGGLE", value = "false" },
+        { name = "SLEEP_TRANSACTION", value = "4" },
+        { name = "BOOTSTRAP_SERVERS", value = "172.31.23.185:9092" }
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -118,7 +119,7 @@ resource "aws_ecs_service" "service_task" {
   cluster         = var.ecs_cluster_name
   task_definition = aws_ecs_task_definition.service_task.arn
   launch_type     = "FARGATE"
-  desired_count   = 1
+  desired_count   = 3
 
   network_configuration {
     subnets          = var.public_subnets

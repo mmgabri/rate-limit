@@ -6,15 +6,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
 public class TransactionRequestListener {
     private static final Logger logger = LoggerFactory.getLogger(TransactionRequestListener.class);
     private final RateLimiter tpsLimiter; // injetado do bean
+
+    @Value("${app.rate-limit.toggle:false}")
+    private boolean toggleRateLimiter;
 
     private final ProcessTransactionService process;
 
@@ -30,13 +36,22 @@ public class TransactionRequestListener {
     )
     public void onEvent(final ConsumerRecord<String, String> message, final Acknowledgment ack) {
         receivedMessage(message, ack);
+      //  logger.info("teste");
     }
 
     protected void receivedMessage(final ConsumerRecord<String, String> message, final Acknowledgment ack) {
-        try {
-            // Bloqueia até conseguir 1 permissão (1 transação)
-            tpsLimiter.acquire(); // 1 permit = 1 msg
 
+        if (toggleRateLimiter) {
+            // Bloqueia até conseguir 1 permissão (1 transação) - Bloqueante
+            //     tpsLimiter.acquire(); // 1 permit = 1 msg
+
+            if (!tpsLimiter.tryAcquire(0, TimeUnit.MILLISECONDS)) {
+                // Sem ack => volta mensagem para o kafka -  Não bloqueante
+                return;
+            }
+        }
+
+        try {
             logger.info("Mensagem recebida do tópico: {}", message.value());
             process.process(message.value());
         } catch (Exception e) {

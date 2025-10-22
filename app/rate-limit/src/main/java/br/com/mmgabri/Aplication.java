@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Aplication {
     private static final Logger logger = LoggerFactory.getLogger(Aplication.class);
     public static void main(String[] args) {
-        logger.info("Subindo aplicação versão 1.0");
+        logger.info("Subindo aplicação versão 2.0");
         SpringApplication.run(Aplication.class, args);
     }
 }
