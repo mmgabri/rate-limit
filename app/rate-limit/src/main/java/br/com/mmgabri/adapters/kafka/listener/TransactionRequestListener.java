@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -17,14 +18,15 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TransactionRequestListener {
     private static final Logger logger = LoggerFactory.getLogger(TransactionRequestListener.class);
-    private final RateLimiter tpsLimiter; // injetado do bean
+
+    private final RateLimiter tpsLimiter;
 
     @Value("${app.rate-limit.toggle:false}")
     private boolean toggleRateLimiter;
 
     private final ProcessTransactionService process;
 
-    private TransactionRequestListener(RateLimiter tpsLimiter, final ProcessTransactionService process) {
+    private TransactionRequestListener(@Qualifier("globalTpsLimiter") RateLimiter tpsLimiter, final ProcessTransactionService process) {
         this.tpsLimiter = tpsLimiter;
         this.process = process;
     }
@@ -36,7 +38,6 @@ public class TransactionRequestListener {
     )
     public void onEvent(final ConsumerRecord<String, String> message, final Acknowledgment ack) {
         receivedMessage(message, ack);
-      //  logger.info("teste");
     }
 
     protected void receivedMessage(final ConsumerRecord<String, String> message, final Acknowledgment ack) {

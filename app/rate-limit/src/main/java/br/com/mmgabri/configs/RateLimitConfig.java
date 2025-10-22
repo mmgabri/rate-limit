@@ -8,9 +8,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RateLimitConfig {
 
-    @Bean
-    public RateLimiter tpsLimiter(@Value("${app.rate-limit.tps:10}") double tps) {
-        // Suaviza rajadas. Se quiser warmup: RateLimiter.create(tps, 5, TimeUnit.SECONDS);
+    @Bean("globalTpsLimiter")
+    public RateLimiter globalTpsLimiter(@Value("${app.rate-limit.global.tps:100}") double tps) {
+        return RateLimiter.create(tps);
+    }
+
+    @Bean("topicRequestTransactionTpsLimiter")
+    public RateLimiter topicTransactionLimiter(@Value("${app.rate-limit.topic.request-transactions.tps:50}") double tps) {
+        return RateLimiter.create(tps);
+    }
+
+    @Bean("topicRequestReversalTpsLimiter")
+    public RateLimiter topicRequestReversalTpsLimiter(@Value("${app.rate-limit.topic.request-reversal.tps:10}") double tps) {
         return RateLimiter.create(tps);
     }
 }

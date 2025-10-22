@@ -45,14 +45,16 @@ management:
 kafka:
   topic:
     request-transactions: topic-request-transactions
-  consumer:
-    concurrency: 3  # Número de threads consumidoras
-    rate:
-      messages-per-second: 1  # Taxa máxima de mensagens por segundo
 
 app:
   rate-limit:
     toggle: true
-    tps: 700
+    global:
+      tps: 5000
+    topic:
+      request-transactions:
+        tps: 200
+      request-reversal:
+        tps: 10
   sleep:
     transaction: 4 # usado 5 ms nos testes
