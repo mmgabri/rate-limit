@@ -23,7 +23,7 @@ public class MetricsService {
             //Calcula duration
             var duration = 0L;
             duration = Duration.between(startTime, OffsetDateTime.now()).toMillis();
-            logger.info("Request processado em {} ms", duration);
+        //    logger.info("Request processado em {} ms", duration);
 
             statsDClient.recordExecutionTime("app_transaction_duration", duration, "app:rate-limit");
         } catch (Exception e) {

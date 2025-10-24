@@ -1,7 +1,7 @@
 package br.com.mmgabri.adapters.kafka.listener;
 
 import br.com.mmgabri.services.ProcessTransactionService;
-import com.google.common.util.concurrent.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -42,18 +42,14 @@ public class TransactionRequestListener {
 
     protected void receivedMessage(final ConsumerRecord<String, String> message, final Acknowledgment ack) {
 
-        if (toggleRateLimiter) {
-            // Bloqueia até conseguir 1 permissão (1 transação) - Bloqueante
-            //     tpsLimiter.acquire(); // 1 permit = 1 msg
-
-            if (!tpsLimiter.tryAcquire(0, TimeUnit.MILLISECONDS)) {
-                // Sem ack => volta mensagem para o kafka -  Não bloqueante
-                return;
-            }
+        if (toggleRateLimiter && !tpsLimiter.acquirePermission()) {
+            logger.warn("Limite de taxa TPS atingido. Mensagem será reentregue ao tópico: {}", message.offset());
+            ack.nack(0);
+            return; // sem ack → reentrega
         }
 
         try {
-            logger.info("Mensagem recebida do tópico: {}", message.value());
+   //         logger.info("Mensagem recebida do tópico: {}", message.offset());
             process.process(message.value());
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem: {}", e.getMessage(), e);

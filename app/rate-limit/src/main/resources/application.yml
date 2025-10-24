@@ -50,7 +50,9 @@ app:
   rate-limit:
     toggle: true
     global:
-      tps: 5000
+      limit-for-period: 600   #tps
+      limit-refresh-period: 1000  # tamanho da janela em ms
+      timeout-duration: 0  # tempo máximo de espera em ms / 0 = não bloqueia
     topic:
       request-transactions:
         tps: 200
