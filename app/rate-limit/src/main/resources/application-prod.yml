@@ -52,6 +52,10 @@ kafka:
 app:
   rate-limit:
     toggle: ${RATE_LIMIT_TOGGLE}
-    tps: ${RATE_LIMIT_TPS}
+    global:
+      limit-for-period: ${LIMIT_FOR_PERIOD}
+      limit-refresh-period: ${LIMIT_REFRESH_PERIOD}
+      timeout-duration: ${TIMEOUT_DURATION}
+      nack-duration: ${NACK_DURATION}
   sleep:
     transaction: ${SLEEP_TRANSACTION}

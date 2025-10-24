@@ -31,4 +31,13 @@ public class MetricsService {
             throw new RuntimeException(e);
         }
     }
+
+    public void incrementMetricCounter() {
+        try {
+            statsDClient.incrementCounter("app_transaction_rate_limit", "app:rate-limit");
+        } catch (Exception e) {
+            logger.error("Error ao enviar métrica", e);
+            throw new RuntimeException(e);
+        }
+    }
 }
