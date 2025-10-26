@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: formatador
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
+    consumer:
+      auto-offset-reset: latest
+      client-id: transaction-consumer-client
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: transaction-consumer-group
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        max:
+          poll:
+            records: ${MAX_POLL_RECORDS}
+            interval:
+              ms: 120000
+        #heartbeat.interval.ms: 3000
+        #session.timeout.ms: 45000
+        #max.partition.fetch.bytes: 1048576  # 1MB
+        #fetch.max.wait.ms: 500
+server:
+  port: 8081
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.90,0.95,0.99
+  datadog:
+    metrics:
+      export:
+        apiKey: 432ae4eb0e2702b3c572587400077c09
+        step: 5s
+        uri: https://us5.datadoghq.com/
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+kafka:
+  topic:
+    request-transactions: topic-request-transactions
+  consumer:
+    concurrency: 3  # Número de threads consumidoras
+    rate:
+      messages-per-second: 1  # Taxa máxima de mensagens por segundo
+
+app:
+  rate-limit:
+    toggle: ${RATE_LIMIT_TOGGLE}
+    global:
+      limit-for-period: ${LIMIT_FOR_PERIOD}
+      limit-refresh-period: ${LIMIT_REFRESH_PERIOD}
+      timeout-duration: ${TIMEOUT_DURATION}
+      nack-duration: ${NACK_DURATION}
+  sleep:
+    transaction: ${SLEEP_TRANSACTION}

@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: formatador
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: latest
+      client-id: transaction-consumer-client
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: transaction-consumer-group
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        max:
+          poll:
+            records: 10
+            interval:
+              ms: 120000
+        #heartbeat.interval.ms: 3000
+        #session.timeout.ms: 45000
+        #max.partition.fetch.bytes: 1048576  # 1MB
+        #fetch.max.wait.ms: 500
+server:
+  port: 8081
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.90,0.95,0.99
+  datadog:
+    metrics:
+      export:
+        apiKey: 432ae4eb0e2702b3c572587400077c09
+        step: 5s
+        uri: https://us5.datadoghq.com/
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+
+kafka:
+  topic:
+    request-transactions: topic-request-transactions
+
+app:
+  rate-limit:
+    toggle: true
+    global:
+      limit-for-period: 400   #tps
+      limit-refresh-period: 1000  # tamanho da janela em ms
+      timeout-duration: 0  # tempo máximo de espera em ms / 0 = não bloqueia
+      nack-duration: 0
+    topic:
+      request-transactions:
+        tps: 200
+      request-reversal:
+        tps: 10
+  sleep:
+    transaction: 4 # usado 5 ms nos testes
