@@ -16,7 +16,7 @@ services:
       # Endereços anunciados
       # INTERNAL: containers do mesmo docker network
       # EXTERNAL: IP PRIVADO da EC2 (alcançável pelas tasks ECS na VPC)
-      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:19092,EXTERNAL://172.31.23.185:9092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:19092,EXTERNAL://172.31.28.51:9092"
 
       # Inter-broker via INTERNAL
       KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"

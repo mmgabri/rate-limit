@@ -34,10 +34,13 @@ resource "aws_ecs_task_definition" "service_task" {
         { name = "DD_JMXFETCH_STATSD_PORT", value = "8125" },
         { name = "DD_API_KEY", value = var.datadog_api_key },
         { name = "MAX_POLL_RECORDS", value = "10" },
-        { name = "RATE_LIMIT_TPS", value = "700" },
-        { name = "RATE_LIMIT_TOGGLE", value = "false" },
+        { name = "RATE_LIMIT_TOGGLE", value = "true" },
+        { name = "LIMIT_FOR_PERIOD", value = "400" },
+        { name = "LIMIT_REFRESH_PERIOD", value = "1000" },
+        { name = "TIMEOUT_DURATION", value = "0" },
+        { name = "NACK_DURATION", value = "0" },
         { name = "SLEEP_TRANSACTION", value = "4" },
-        { name = "BOOTSTRAP_SERVERS", value = "172.31.23.185:9092" }
+        { name = "BOOTSTRAP_SERVERS", value = "172.31.28.51:9092" }
       ]
       logConfiguration = {
         logDriver = "awslogs"
